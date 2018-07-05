@@ -3,10 +3,8 @@
 
 #include <iostream>
 
-/* T is type of elements of the heap
-   M is type of median representation */
 /* Class is named SimpleHeap, because it doesn't have all heap functionality */
-template <typename T, typename M> 
+template <typename T> 
 class SimpleHeap
 {
 private:
@@ -35,6 +33,8 @@ private:
         }
     };
 
+    Node* root;
+    
     /* Return pointer to place where new Node should be inserted.
        For this method to work properly it is important to insert nodes
        from left to right, so be careful with compare function! */
@@ -56,7 +56,6 @@ private:
     }
 
 public:
-    Node* root;
     std::size_t size;
 
     /* This is pointer to function which should compare values of Nodes, 

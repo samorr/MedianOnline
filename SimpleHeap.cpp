@@ -1,19 +1,19 @@
 #include "SimpleHeap.h"
 
-template <typename T, typename M>
-auto SimpleHeap<T,M>::getFirstFreePointer(T v)
+template <typename T>
+auto SimpleHeap<T>::getFirstFreePointer(T v)
 {
     return getNodeToAddOrRemove(size+1, false, true, v);
 }
 
-template <typename T, typename M>
-auto SimpleHeap<T,M>::removeLastNode()
+template <typename T>
+auto SimpleHeap<T>::removeLastNode()
 {
     return getNodeToAddOrRemove(size, true, false, T());
 }
 
-template <typename T, typename M>
-auto SimpleHeap<T,M>::getNodeToAddOrRemove
+template <typename T>
+auto SimpleHeap<T>::getNodeToAddOrRemove
     (std::size_t way, bool remove, bool add, T v)
 {
     auto nodePointer = root;
@@ -51,7 +51,7 @@ auto SimpleHeap<T,M>::getNodeToAddOrRemove
                 }
                 else if (add)
                 {
-                    returnNode = new SimpleHeap<T,M>::Node(v);
+                    returnNode = new SimpleHeap<T>::Node(v);
                     (nodePointer)->leftSon = returnNode;
                     (returnNode)->father = nodePointer;
                 }
@@ -65,7 +65,7 @@ auto SimpleHeap<T,M>::getNodeToAddOrRemove
             }
             else if (add)
             {
-                returnNode = new SimpleHeap<T,M>::Node(v);
+                returnNode = new SimpleHeap<T>::Node(v);
                 (nodePointer)->rightSon = returnNode;
                 (returnNode)->father = nodePointer;
             }
@@ -78,8 +78,8 @@ auto SimpleHeap<T,M>::getNodeToAddOrRemove
     }
 }
 
-template <typename T, typename M>
-T SimpleHeap<T,M>::removeRoot()
+template <typename T>
+T SimpleHeap<T>::removeRoot()
 {
     T value = root->value;
     if (size == 1)
@@ -111,16 +111,16 @@ T SimpleHeap<T,M>::removeRoot()
     return value;
 }
 
-template <typename T, typename M>
-void SimpleHeap<T,M>::restoreOrder(SimpleHeap<T,M>::Node* node)
+template <typename T>
+void SimpleHeap<T>::restoreOrder(SimpleHeap<T>::Node* node)
 {
     /* If there is a disorder only one method will change something */
     restoreOrderUp(node);
     restoreOrderDown(node);
 }
 
-template <typename T, typename M>
-void SimpleHeap<T,M>::restoreOrderDown(SimpleHeap<T,M>::Node* node)
+template <typename T>
+void SimpleHeap<T>::restoreOrderDown(SimpleHeap<T>::Node* node)
 {
     /* If leftSon doesn't exist it means that rightSon doesn't exist either */
     if (node->leftSon == nullptr)
@@ -142,8 +142,8 @@ void SimpleHeap<T,M>::restoreOrderDown(SimpleHeap<T,M>::Node* node)
     /* We swap with firstSwaped if compare(node->value, son->value) is false 
        for both sons. If only for one we swap with that one. Else we don't
        swap and end restoring. */
-    SimpleHeap<T,M>::Node* firstSwaped = leftThanRight ? node->leftSon : node->rightSon;
-    SimpleHeap<T,M>::Node* secondSwaped = !leftThanRight ? node->leftSon : node->rightSon;
+    SimpleHeap<T>::Node* firstSwaped = leftThanRight ? node->leftSon : node->rightSon;
+    SimpleHeap<T>::Node* secondSwaped = !leftThanRight ? node->leftSon : node->rightSon;
     if (!compare(node->value, firstSwaped->value))
     {
         swapValues(node->value, firstSwaped->value);
@@ -159,8 +159,8 @@ void SimpleHeap<T,M>::restoreOrderDown(SimpleHeap<T,M>::Node* node)
 }
 
 
-template <typename T, typename M>
-void SimpleHeap<T,M>::restoreOrderUp(SimpleHeap<T,M>::Node* node)
+template <typename T>
+void SimpleHeap<T>::restoreOrderUp(SimpleHeap<T>::Node* node)
 {
     /* node->father == nullptr if and only if node is a root, then we can end */
     if (node->father != nullptr && !compare(node->father->value, node->value))
@@ -170,12 +170,12 @@ void SimpleHeap<T,M>::restoreOrderUp(SimpleHeap<T,M>::Node* node)
     }
 }
 
-template <typename T, typename M>
-void SimpleHeap<T,M>::insert(T v)
+template <typename T>
+void SimpleHeap<T>::insert(T v)
 {
     if (size == 0)
     {
-        root = new SimpleHeap<T,M>::Node(v);
+        root = new SimpleHeap<T>::Node(v);
         size++;
         return;
     }
