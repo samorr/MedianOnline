@@ -1,4 +1,4 @@
-Flags = -Wall -Werror -std=c++17 -g # use also -g flag for debugging
+Flags = -Wall -Werror -std=c++17 # use also -g flag for debugging
 CPP = g++
 
 main : Makefile main.o templates.o MedianList.o MedianHeaps.o
@@ -7,7 +7,7 @@ main : Makefile main.o templates.o MedianList.o MedianHeaps.o
 main.o : Makefile main.cpp MedianList.h MedianHeaps.h
 	$(CPP) -c $(Flags) main.cpp -o main.o
 
-templates.o : Makefile templates.cpp MedianList.h SimpleHeap.h MedianHeaps.h
+templates.o : Makefile templates.cpp MedianList.h SimpleHeap.h MedianHeaps.h MedianList.cpp SimpleHeap.cpp MedianHeaps.cpp
 	$(CPP) -c $(Flags) templates.cpp -o templates.o
 
 MedianList.o : Makefile MedianList.h MedianList.cpp
@@ -20,4 +20,4 @@ SimpleHeap.o : Makefile SimpleHeap.h SimpleHeap.cpp
 	$(CPP) -c $(Flags) SimpleHeap.cpp -o SimpleHeap.o
 
 clean :
-	$(RM) MedianList.o templates.o main.o main
+	$(RM) MedianHeaps.o SimpleHeap.o MedianList.o templates.o main.o main

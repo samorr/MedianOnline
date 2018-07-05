@@ -2,6 +2,7 @@
 #define SIMPLE_HEAP_H 1
 
 #include <iostream>
+#include <stdexcept>
 
 /* Class is named SimpleHeap, because it doesn't have all heap functionality */
 template <typename T> 
@@ -34,16 +35,14 @@ private:
     };
 
     Node* root;
-    
-    /* Return pointer to place where new Node should be inserted.
-       For this method to work properly it is important to insert nodes
-       from left to right, so be careful with compare function! */
-    auto removeLastNode();
-    auto getFirstFreePointer(T v);
+
+    /* This is very generic function. Getting first free pointer and removing
+       last node are very similar operations, because we have to move around
+       the heap in the same way. Only last operations are different, so by
+       boolean arguments we can say if we want to add or remove node. */
     auto getNodeToAddOrRemove(std::size_t way, bool remove, bool add, T v);
 
-    /* Restore order in the heap starting from *node */
-    void restoreOrder(Node* node);
+    /* Restore order in the heap starting from *node, moving it up or down. */
     void restoreOrderUp(Node* node);
     void restoreOrderDown(Node* node);
 
@@ -60,8 +59,7 @@ public:
 
     /* This is pointer to function which should compare values of Nodes, 
        to define linear order on them. With different compare functions
-       we can make different heaps (e.g. min or max heaps).
-       See annotation to getLastPointer method. */
+       we can make different heaps (e.g. min or max heaps). */
     bool (* compare)(T, T);
 
     SimpleHeap(bool (* cmp)(T, T)) : root(nullptr), size(0), compare(cmp) {}
@@ -79,6 +77,10 @@ public:
 
     T getRootValue() const
     {
+        if (size == 0)
+        {
+            throw std::invalid_argument("Attempt to get root value from empty heap!");
+        }
         return root->value;
     }
 

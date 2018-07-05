@@ -1,6 +1,7 @@
 #include <iostream>
 #include "MedianList.h"
 #include "MedianHeaps.h"
+#include "SimpleHeap.h"
 
 
 int main()
@@ -34,7 +35,6 @@ int main()
     std::cin >> input;
     while(input != "q")
     {
-        // std::cout << input;
         if (input == "m")
         {
             std::cout << heaps.getMedianValue() << " ";
@@ -45,16 +45,6 @@ int main()
         }
         std::cin >> input;
     }
-
-    // SimpleHeap<int> heap([](int a, int b) { return a >= b; });
-    // heap.insert(10);
-    // heap.insert(5);
-    // heap.insert(20);
-    // std::cout << heap.removeRoot() << "\n";
-    // heap.insert(10);
-    // heap.insert(1);
-    // heap.insert(4);
-    // std::cout << heap.removeRoot() << "\n";
 
     return 0;
 }

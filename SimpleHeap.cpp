@@ -1,18 +1,6 @@
 #include "SimpleHeap.h"
 
 template <typename T>
-auto SimpleHeap<T>::getFirstFreePointer(T v)
-{
-    return getNodeToAddOrRemove(size+1, false, true, v);
-}
-
-template <typename T>
-auto SimpleHeap<T>::removeLastNode()
-{
-    return getNodeToAddOrRemove(size, true, false, T());
-}
-
-template <typename T>
 auto SimpleHeap<T>::getNodeToAddOrRemove
     (std::size_t way, bool remove, bool add, T v)
 {
@@ -20,13 +8,13 @@ auto SimpleHeap<T>::getNodeToAddOrRemove
     /* This situation shouldn't happen with normal usage of this method. */
     if (way == 1)
     {
-        std::cout << "Error!\n";
-        return root;
+        throw std::logic_error
+            ("Attempting to get access to root in illegal way! Use removeRoot or getRootValue method.");
     }
     /* We can find way to first free pointer with reversed binary notation
        of heap size. */
-    // std::size_t way = size;
     std::size_t binaryMask = 1;
+    /* binaryMask has to be as long as way and contains only 1's. */
     while(binaryMask < way)
     {
         binaryMask <<= 1;
@@ -37,10 +25,10 @@ auto SimpleHeap<T>::getNodeToAddOrRemove
     while(true)
     {
         binaryMask >>= 1;
-        /* Check if most significant bit in way is 0 or 1. If 0 we should take
-           left son, else right son. */
+        /* Sons are leafs if binaryMask has ended. */
         if (binaryMask == 0)
         {
+            /* Now we have to distinguish between adding and removing. */
             if (way == 0)
             {
                 auto returnNode = (nodePointer)->leftSon;
@@ -71,9 +59,12 @@ auto SimpleHeap<T>::getNodeToAddOrRemove
             }
             return returnNode;
         }
+        /* Checking if most significant bit in way is 0 or 1. If 0 we should take
+           left son, else right son. */
         nodePointer = (way & ~binaryMask) == 0 ?
                                 (nodePointer)->leftSon :
                                 (nodePointer)->rightSon;
+        /* Forgetting most significant bit of way. */
         way &= binaryMask;
     }
 }
@@ -84,13 +75,17 @@ T SimpleHeap<T>::removeRoot()
     T value = root->value;
     if (size == 1)
     {
+        size--;
         delete root;
         root = nullptr;
         return value;
     }
-    auto lastNode = removeLastNode();
+    /* T is numeric type so we can cast 0 to it. This parameter doesn't matter
+       anyway. */
+    auto lastNode = getNodeToAddOrRemove(size, true, false, static_cast<T>(0));
     (lastNode)->leftSon = root->leftSon;
     (lastNode)->rightSon = root->rightSon;
+    /* rightSon can exist only if leftSon exists */
     if (root->leftSon != nullptr)
     {
         root->leftSon->father = lastNode;
@@ -109,14 +104,6 @@ T SimpleHeap<T>::removeRoot()
        restoreOrderDown. */
     restoreOrderDown(root);
     return value;
-}
-
-template <typename T>
-void SimpleHeap<T>::restoreOrder(SimpleHeap<T>::Node* node)
-{
-    /* If there is a disorder only one method will change something */
-    restoreOrderUp(node);
-    restoreOrderDown(node);
 }
 
 template <typename T>
@@ -142,8 +129,8 @@ void SimpleHeap<T>::restoreOrderDown(SimpleHeap<T>::Node* node)
     /* We swap with firstSwaped if compare(node->value, son->value) is false 
        for both sons. If only for one we swap with that one. Else we don't
        swap and end restoring. */
-    SimpleHeap<T>::Node* firstSwaped = leftThanRight ? node->leftSon : node->rightSon;
-    SimpleHeap<T>::Node* secondSwaped = !leftThanRight ? node->leftSon : node->rightSon;
+    auto firstSwaped = leftThanRight ? node->leftSon : node->rightSon;
+    auto secondSwaped = !leftThanRight ? node->leftSon : node->rightSon;
     if (!compare(node->value, firstSwaped->value))
     {
         swapValues(node->value, firstSwaped->value);
@@ -162,7 +149,7 @@ void SimpleHeap<T>::restoreOrderDown(SimpleHeap<T>::Node* node)
 template <typename T>
 void SimpleHeap<T>::restoreOrderUp(SimpleHeap<T>::Node* node)
 {
-    /* node->father == nullptr if and only if node is a root, then we can end */
+    /* father == nullptr if and only if node is a root, then we can end */
     if (node->father != nullptr && !compare(node->father->value, node->value))
     {
         swapValues(node->father->value, node->value);
@@ -179,8 +166,7 @@ void SimpleHeap<T>::insert(T v)
         size++;
         return;
     }
-    auto placeToInsert = getFirstFreePointer(v);
-    restoreOrder(placeToInsert);
-
+    auto placeOfInsert = getNodeToAddOrRemove(size+1, false, true, v);
+    restoreOrderUp(placeOfInsert);
     size++;
 }

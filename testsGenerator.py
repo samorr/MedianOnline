@@ -8,7 +8,7 @@ def generate_test(size, name):
         f.write(input)
     
     medians = map(lambda ind : np.median(values[:ind]), median_requests)
-    output = ' '.join(map(lambda m : str(int(m)) if m == int(m) else str(m) , medians))
+    output = ' '.join(map(lambda m : str(int(m)) if m == int(m) else str(m) , medians)) + ' '
     with open(name + '_out', 'w') as f:
         f.write(output)
     
