@@ -6,5 +6,8 @@ template class
 
 #include "MedianList.h"
 #include "MedianList.cpp"
+#include "SimpleHeap.h"
+#include "SimpleHeap.cpp"
 
 template class MedianList<int, float>;
+template class SimpleHeap<int, float>;

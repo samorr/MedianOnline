@@ -4,3 +4,7 @@
 *.o
 main
 tests
+out
+
+# task description
+Computer Vision Recruitment Task.pdf
