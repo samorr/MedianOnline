@@ -4,7 +4,7 @@
 *.o
 main
 tests
-out
+prog_out
 
 # task description
 Computer Vision Recruitment Task.pdf

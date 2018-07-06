@@ -36,39 +36,39 @@ auto SimpleHeap<T>::getNodeAfterAddOrRemove
             /* Now we have to distinguish between adding and removing. */
             if (way == 0)
             {
-                auto returnNode = (nodePointer)->leftSon;
+                auto returnNode = nodePointer->leftSon;
                 if (remove)
                 {
-                    (returnNode)->father = nullptr;
-                    (nodePointer)->leftSon = nullptr;
+                    returnNode->father = nullptr;
+                    nodePointer->leftSon = nullptr;
                 }
                 else if (add) 
                 {
                     returnNode = new SimpleHeap<T>::Node(v);
-                    (nodePointer)->leftSon = returnNode;
-                    (returnNode)->father = nodePointer;
+                    nodePointer->leftSon = returnNode;
+                    returnNode->father = nodePointer;
                 }
                 return returnNode;
             }
-            auto returnNode = (nodePointer)->rightSon;
+            auto returnNode = nodePointer->rightSon;
             if (remove)
             {
-                (returnNode)->father = nullptr;
-                (nodePointer)->rightSon = nullptr;
+                returnNode->father = nullptr;
+                nodePointer->rightSon = nullptr;
             }
             else if (add)
             {
                 returnNode = new SimpleHeap<T>::Node(v);
-                (nodePointer)->rightSon = returnNode;
-                (returnNode)->father = nodePointer;
+                nodePointer->rightSon = returnNode;
+                returnNode->father = nodePointer;
             }
             return returnNode;
         }
         /* Checking if most significant bit in way is 0 or 1. If 0 we should take
            left son, else right son. */
         nodePointer = (way & ~binaryMask) == 0 ?
-                                (nodePointer)->leftSon :
-                                (nodePointer)->rightSon;
+                                nodePointer->leftSon :
+                                nodePointer->rightSon;
         /* Forgetting most significant bit of way. */
         way &= binaryMask;
     }
@@ -89,8 +89,8 @@ T SimpleHeap<T>::removeRoot()
     /* T is numeric type so we can cast 0 to it. This parameter doesn't matter
        anyway. */
     auto lastNode = getNodeAfterAddOrRemove(size, true, false, static_cast<T>(0));
-    (lastNode)->leftSon = root->leftSon;
-    (lastNode)->rightSon = root->rightSon;
+    lastNode->leftSon = root->leftSon;
+    lastNode->rightSon = root->rightSon;
     /* rightSon can exist only if leftSon exists */
     if (root->leftSon != nullptr)
     {

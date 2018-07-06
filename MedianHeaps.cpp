@@ -20,6 +20,12 @@ void MedianHeaps<T,M>::insert(T v)
         /* Else it is greater than maxHeap root so it should be inserted in minHeap. */
         minHeap.insert(v);
     }
+    restoreBalance();
+}
+
+template <typename T, typename M>
+void MedianHeaps<T,M>::restoreBalance()
+{
     /* If heaps differ in sizes by more than one, then we should balance them.
        It means removing root from greater and insert it to smaller. */
     /* There cannot be more difference than 2. */

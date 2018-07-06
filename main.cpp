@@ -2,6 +2,10 @@
 #include "MedianList.h"
 #include "MedianHeaps.h"
 
+
+const std::string endOfStreamConst = "q";
+const std::string medianRequestConst = "m";
+
 /*
 This solution usees two heaps, minHeap (minimum at the root) and maxHeap (maximum
 at the root). All elements greater than median are stored in minHeap, smaller
@@ -21,9 +25,9 @@ void runWithMedianHeaps()
                                   [](int a, int b) { return a <= b; });
     std::string input;
     std::cin >> input;
-    while(input != "q")
+    while(input != endOfStreamConst)
     {
-        if (input == "m")
+        if (input == medianRequestConst)
         {
             std::cout << heaps.getMedianValue() << " ";
         }
@@ -49,9 +53,9 @@ void runWithMedianList()
     MedianList<int, float> list;
     std::string input;
     std::cin >> input;
-    while(input != "q")
+    while(input != endOfStreamConst)
     {
-        if (input == "m")
+        if (input == medianRequestConst)
         {
             std::cout << list.getMedianValue() << " ";
         }
@@ -65,10 +69,12 @@ void runWithMedianList()
 
 int main()
 {
-    /* This two lines cause memory leaks, so comment it for memory leaks testing
-       e.g. with valgrind. */
+    /* This two lines are not necessary, but they can make I/O operations faster.
+       First turns off synchronization between C++ and C streams. Second turns
+       off automatic buffor flushing when calling std::cin. Unfortunately they
+       cause memory leaks, so comment it for memory leaks testing e.g. with valgrind. */
     std::ios::sync_with_stdio(false);
-    std::cin.tie(NULL);
+    std::cin.tie(nullptr);
     
     runWithMedianHeaps();
 

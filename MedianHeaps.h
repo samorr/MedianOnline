@@ -11,6 +11,10 @@ class MedianHeaps
 private:
     SimpleHeap<T> maxHeap, minHeap;
 
+    /* Restore balance in heaps if necessary, i.e. when heaps sizes differ by
+       more than one. */
+    void restoreBalance();
+
 public:
     /* cmpMax and cmpMin should define linear order on elements of type T
        in such way, that they can be used in maxHeap and minHeap respectively.
