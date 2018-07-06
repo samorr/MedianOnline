@@ -40,7 +40,7 @@ private:
        last node are very similar operations, because we have to move around
        the heap in the same way. Only last operations are different, so by
        boolean arguments we can say if we want to add or remove node. */
-    auto getNodeToAddOrRemove(std::size_t way, bool remove, bool add, T v);
+    auto getNodeAfterAddOrRemove(std::size_t way, bool remove, bool add, T v);
 
     /* Restore order in the heap starting from *node, moving it up or down. */
     void restoreOrderUp(Node* node);

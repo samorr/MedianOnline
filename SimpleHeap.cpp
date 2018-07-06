@@ -1,9 +1,13 @@
 #include "SimpleHeap.h"
 
 template <typename T>
-auto SimpleHeap<T>::getNodeToAddOrRemove
+auto SimpleHeap<T>::getNodeAfterAddOrRemove
     (std::size_t way, bool remove, bool add, T v)
 {
+    if (remove && add)
+    {
+        throw std::invalid_argument("Can't add and remove at the same time!");
+    }
     auto nodePointer = root;
     /* This situation shouldn't happen with normal usage of this method. */
     if (way == 1)
@@ -20,6 +24,7 @@ auto SimpleHeap<T>::getNodeToAddOrRemove
         binaryMask <<= 1;
         binaryMask++;
     }
+    /* First we want to forget most significant bit, because it encodes root. */
     binaryMask >>= 1;
     way &= binaryMask;
     while(true)
@@ -37,7 +42,7 @@ auto SimpleHeap<T>::getNodeToAddOrRemove
                     (returnNode)->father = nullptr;
                     (nodePointer)->leftSon = nullptr;
                 }
-                else if (add)
+                else if (add) 
                 {
                     returnNode = new SimpleHeap<T>::Node(v);
                     (nodePointer)->leftSon = returnNode;
@@ -72,6 +77,7 @@ auto SimpleHeap<T>::getNodeToAddOrRemove
 template <typename T>
 T SimpleHeap<T>::removeRoot()
 {
+    /* When heap contains only root we treat it in different way. */
     T value = root->value;
     if (size == 1)
     {
@@ -82,7 +88,7 @@ T SimpleHeap<T>::removeRoot()
     }
     /* T is numeric type so we can cast 0 to it. This parameter doesn't matter
        anyway. */
-    auto lastNode = getNodeToAddOrRemove(size, true, false, static_cast<T>(0));
+    auto lastNode = getNodeAfterAddOrRemove(size, true, false, static_cast<T>(0));
     (lastNode)->leftSon = root->leftSon;
     (lastNode)->rightSon = root->rightSon;
     /* rightSon can exist only if leftSon exists */
@@ -153,6 +159,7 @@ void SimpleHeap<T>::restoreOrderUp(SimpleHeap<T>::Node* node)
     if (node->father != nullptr && !compare(node->father->value, node->value))
     {
         swapValues(node->father->value, node->value);
+        /* When we add leaf we need to restore order in up direction. */
         restoreOrderUp(node->father);
     }
 }
@@ -160,13 +167,15 @@ void SimpleHeap<T>::restoreOrderUp(SimpleHeap<T>::Node* node)
 template <typename T>
 void SimpleHeap<T>::insert(T v)
 {
+    /* To empty heap we add root and that's all. */
     if (size == 0)
     {
         root = new SimpleHeap<T>::Node(v);
         size++;
         return;
     }
-    auto placeOfInsert = getNodeToAddOrRemove(size+1, false, true, v);
+    /* Else we need to add new node in right place. */
+    auto placeOfInsert = getNodeAfterAddOrRemove(size+1, false, true, v);
     restoreOrderUp(placeOfInsert);
     size++;
 }

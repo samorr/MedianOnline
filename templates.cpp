@@ -1,6 +1,5 @@
 /*
-This file exists only to explicitly instantiate every use of MedianList
-template class
+This file exists only to explicitly instantiate every use of template classes.
 */
 
 #include "MedianList.h"

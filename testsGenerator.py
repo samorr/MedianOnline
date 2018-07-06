@@ -11,4 +11,7 @@ def generate_test(size, name):
     output = ' '.join(map(lambda m : str(int(m)) if m == int(m) else str(m) , medians)) + ' '
     with open(name + '_out', 'w') as f:
         f.write(output)
+
+# This line generate basic random test
+generate_test(100000, 'test')
     

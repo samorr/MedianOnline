@@ -19,5 +19,14 @@ MedianHeaps.o : Makefile MedianHeaps.h MedianHeaps.cpp SimpleHeap.h
 SimpleHeap.o : Makefile SimpleHeap.h SimpleHeap.cpp
 	$(CPP) -c $(Flags) SimpleHeap.cpp -o SimpleHeap.o
 
+runtest : Makefile main test_in test_out
+	./main < test_in > prog_out
+	cmp --silent prog_out test_out && echo -e '\n\n### SUCCESS: Well done! ###' || echo -e '\n\n### ERROR: Some bad answer! ###'
+
+# For test generating you will need python with numpy
+# If you don't have, you can use test generated before
+test_in test_out : Makefile testsGenerator.py
+	python testsGenerator.py
+
 clean :
 	$(RM) MedianHeaps.o SimpleHeap.o MedianList.o templates.o main.o main
